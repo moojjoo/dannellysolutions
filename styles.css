@@ -22,6 +22,33 @@ body {
   line-height: 1.6;
 }
 a { color: inherit; text-decoration: none; }
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: #ffffff;
+  color: #06111f;
+  padding: .65rem .9rem;
+  border-radius: .5rem;
+  font-weight: 700;
+  border: 2px solid #06111f;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+:focus-visible {
+  outline: 3px solid #6ee7f9;
+  outline-offset: 3px;
+}
+.button:focus-visible,
+.brand:focus-visible {
+  outline-offset: 5px;
+}
+.section[id],
+.cta[id] {
+  scroll-margin-top: 7rem;
+}
 .site-header {
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; justify-content: space-between;
@@ -31,18 +58,31 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: .75rem; font-weight: 800; letter-spacing: -.02em; }
+.brand-logo {
+  display: block;
+  width: clamp(10rem, 26vw, 15rem);
+  height: auto;
+  max-height: 8rem;
+  object-fit: contain;
+}
 .brand-mark {
   display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: .8rem;
   background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #06111f; font-weight: 900;
 }
 nav { display: flex; gap: 1.2rem; color: var(--muted); font-weight: 600; }
 nav a:hover { color: var(--text); }
+nav a:focus-visible,
+nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: .2rem;
+}
 .hero {
   min-height: 78vh;
   display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(18rem, .55fr); gap: 2rem;
-  align-items: center; padding: clamp(3rem, 7vw, 7rem) clamp(1rem, 4vw, 4rem);
+  align-items: center;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 4rem) clamp(3rem, 7vw, 7rem);
 }
-.eyebrow { color: var(--brand); text-transform: uppercase; font-size: .78rem; letter-spacing: .16em; font-weight: 800; }
+.eyebrow { color: var(--brand); text-transform: uppercase; font-size: .96rem; letter-spacing: .16em; font-weight: 800; }
 h1, h2, h3 { line-height: 1.08; margin: 0 0 1rem; }
 h1 { font-size: clamp(2.6rem, 7vw, 5.7rem); letter-spacing: -.06em; max-width: 1000px; }
 h2 { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.04em; }
@@ -77,7 +117,33 @@ h3 { font-size: 1.35rem; }
 .cta { text-align: center; max-width: 1000px; margin: 2rem auto 5rem; }
 footer { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem clamp(1rem, 4vw, 4rem); border-top: 1px solid var(--line); color: var(--muted); flex-wrap: wrap; }
 @media (max-width: 900px) {
+  .site-header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: .75rem;
+  }
   .hero, .split { grid-template-columns: 1fr; }
   .grid.cards, .trust-strip { grid-template-columns: 1fr; }
-  nav { display: none; }
+  nav {
+    display: flex;
+    width: 100%;
+    gap: .9rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .brand-logo {
+    width: clamp(9.5rem, 38vw, 12rem);
+    max-height: 3.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
