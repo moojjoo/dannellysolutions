@@ -1,0 +1,83 @@
+:root {
+  --bg: #0b1220;
+  --panel: #121b2e;
+  --panel-2: #172238;
+  --text: #eef4ff;
+  --muted: #aebbd0;
+  --brand: #6ee7f9;
+  --brand-2: #8b5cf6;
+  --line: rgba(255,255,255,.12);
+  --shadow: 0 24px 60px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(110,231,249,.18), transparent 30rem),
+    radial-gradient(circle at top right, rgba(139,92,246,.20), transparent 28rem),
+    var(--bg);
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+.site-header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem clamp(1rem, 4vw, 4rem);
+  backdrop-filter: blur(14px);
+  background: rgba(11,18,32,.78);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: .75rem; font-weight: 800; letter-spacing: -.02em; }
+.brand-mark {
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: .8rem;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #06111f; font-weight: 900;
+}
+nav { display: flex; gap: 1.2rem; color: var(--muted); font-weight: 600; }
+nav a:hover { color: var(--text); }
+.hero {
+  min-height: 78vh;
+  display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(18rem, .55fr); gap: 2rem;
+  align-items: center; padding: clamp(3rem, 7vw, 7rem) clamp(1rem, 4vw, 4rem);
+}
+.eyebrow { color: var(--brand); text-transform: uppercase; font-size: .78rem; letter-spacing: .16em; font-weight: 800; }
+h1, h2, h3 { line-height: 1.08; margin: 0 0 1rem; }
+h1 { font-size: clamp(2.6rem, 7vw, 5.7rem); letter-spacing: -.06em; max-width: 1000px; }
+h2 { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.04em; }
+h3 { font-size: 1.35rem; }
+.lead { font-size: clamp(1.1rem, 2vw, 1.35rem); max-width: 800px; color: var(--muted); }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 3.2rem; padding: 0 1.25rem; border-radius: 999px; font-weight: 800; }
+.button.primary { color: #06111f; background: linear-gradient(135deg, var(--brand), #d8b4fe); }
+.button.secondary { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.04); }
+.hero-card, .card, .cta, .steps div {
+  background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+  border: 1px solid var(--line); border-radius: 1.5rem; box-shadow: var(--shadow);
+}
+.hero-card { padding: 1.5rem; }
+.hero-card ul { padding-left: 1.2rem; color: var(--muted); }
+.trust-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  padding: 0 clamp(1rem, 4vw, 4rem) 4rem;
+}
+.trust-strip div { padding: 1.2rem; border-top: 1px solid var(--line); }
+.trust-strip strong { display: block; font-size: 1.4rem; }
+.trust-strip span { color: var(--muted); }
+.section { padding: clamp(3rem, 7vw, 6rem) clamp(1rem, 4vw, 4rem); }
+.section-heading { max-width: 860px; margin-bottom: 2rem; }
+.grid.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.card { padding: 1.4rem; }
+.card p, .split p, .cta p { color: var(--muted); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.steps { display: grid; gap: 1rem; }
+.steps div { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1rem; align-items: center; }
+.steps span { color: var(--brand); font-weight: 900; }
+.cta { text-align: center; max-width: 1000px; margin: 2rem auto 5rem; }
+footer { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem clamp(1rem, 4vw, 4rem); border-top: 1px solid var(--line); color: var(--muted); flex-wrap: wrap; }
+@media (max-width: 900px) {
+  .hero, .split { grid-template-columns: 1fr; }
+  .grid.cards, .trust-strip { grid-template-columns: 1fr; }
+  nav { display: none; }
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Dannelly Solutions Inc. logo</title>
+  <desc id="desc">Rounded square blue to purple gradient logo with a white rising arrow, circuit nodes, and Dannelly Solutions Inc. text.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#63DDF2"/>
+      <stop offset="48%" stop-color="#6397F1"/>
+      <stop offset="100%" stop-color="#8358F6"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#3157C7" flood-opacity=".18"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="64" fill="url(#bg)"/>
+
+  <g fill="none" stroke="#fff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" filter="url(#softShadow)">
+    <!-- main growth arrow -->
+    <path d="M178 260 L334 104"/>
+    <path d="M314 92 L374 76 L358 136 Z" fill="#fff" stroke="none"/>
+
+    <!-- left circuit trace -->
+    <path d="M176 260 L176 226 L232 170"/>
+    <circle cx="236" cy="166" r="17"/>
+
+    <!-- lower circuit trace -->
+    <path d="M236 276 L276 236 L276 294"/>
+    <circle cx="276" cy="236" r="17"/>
+
+    <!-- right circuit trace -->
+    <path d="M314 294 L314 208 L346 176"/>
+    <circle cx="314" cy="208" r="17"/>
+    <circle cx="350" cy="172" r="17"/>
+  </g>
+
+  <g fill="#fff" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" letter-spacing="3">
+    <text x="256" y="365" font-size="62" font-weight="900">DANNELLY</text>
+    <text x="256" y="420" font-size="39" font-weight="800">SOLUTIONS INC.</text>
+  </g>
+</svg>
