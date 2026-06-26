@@ -212,6 +212,11 @@ h3 { font-size: 1.35rem; }
 .contact-status.is-error {
   color: #ff9b9b;
 }
+.field-help {
+  margin: .55rem 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
 footer { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem clamp(1rem, 4vw, 4rem); border-top: 1px solid var(--line); color: var(--muted); flex-wrap: wrap; }
 @media (max-width: 900px) {
   .site-header {

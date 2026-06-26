@@ -7,6 +7,20 @@ if (contactForm) {
 	const submitButton = contactForm.querySelector('button[type="submit"]');
 	const startedAtField = document.getElementById('started-at');
 	const endpoint = (contactForm.dataset.endpoint || '').trim();
+	const turnstileWidget = document.getElementById('turnstile-widget');
+	let cachedTurnstileToken = '';
+
+	window.onTurnstileSuccess = (token) => {
+		cachedTurnstileToken = String(token || '').trim();
+	};
+
+	window.onTurnstileExpired = () => {
+		cachedTurnstileToken = '';
+	};
+
+	window.onTurnstileError = () => {
+		cachedTurnstileToken = '';
+	};
 
 	if (startedAtField) {
 		startedAtField.value = String(Date.now());
@@ -32,6 +46,12 @@ if (contactForm) {
 		event.preventDefault();
 
 		const formData = new FormData(contactForm);
+		const tokenFromField = String(formData.get('cf-turnstile-response') || '').trim();
+		const tokenFromApi =
+			window.turnstile && typeof window.turnstile.getResponse === 'function'
+				? String(window.turnstile.getResponse(turnstileWidget) || '').trim()
+				: '';
+
 		const payload = {
 			fullName: String(formData.get('fullName') || '').trim(),
 			workEmail: String(formData.get('workEmail') || '').trim(),
@@ -43,7 +63,7 @@ if (contactForm) {
 			contactPreference: String(formData.get('contactPreference') || '').trim(),
 			startedAt: Number(formData.get('startedAt') || 0),
 			companySite: String(formData.get('companySite') || '').trim(),
-			turnstileToken: String(formData.get('cf-turnstile-response') || '').trim(),
+			turnstileToken: tokenFromField || tokenFromApi || cachedTurnstileToken,
 		};
 
 		if (!payload.fullName || payload.fullName.length < 2 || payload.fullName.length > 80) {
@@ -81,7 +101,7 @@ if (contactForm) {
 		}
 
 		if (!payload.turnstileToken) {
-			setStatus('Please complete the verification challenge.', 'error');
+			setStatus('Verification is required. Complete the human check, then submit.', 'error');
 			return;
 		}
 
@@ -103,11 +123,12 @@ if (contactForm) {
 			}
 
 			contactForm.reset();
+			cachedTurnstileToken = '';
 			if (startedAtField) {
 				startedAtField.value = String(Date.now());
 			}
 			if (window.turnstile && typeof window.turnstile.reset === 'function') {
-				window.turnstile.reset();
+				window.turnstile.reset(turnstileWidget);
 			}
 			setStatus('Thanks. Your request was sent successfully. We will reply soon.', 'success');
 		} catch (error) {
