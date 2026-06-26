@@ -7,6 +7,7 @@ if (contactForm) {
 	const submitButton = contactForm.querySelector('button[type="submit"]');
 	const startedAtField = document.getElementById('started-at');
 	const endpoint = (contactForm.dataset.endpoint || '').trim();
+	const minSubmitMs = 4000;
 	const turnstileWidget = document.getElementById('turnstile-widget');
 	let cachedTurnstileToken = '';
 
@@ -66,6 +67,12 @@ if (contactForm) {
 			turnstileToken: tokenFromField || tokenFromApi || cachedTurnstileToken,
 		};
 
+		const elapsedMs = Date.now() - payload.startedAt;
+		if (!payload.startedAt || Number.isNaN(elapsedMs) || elapsedMs < minSubmitMs) {
+			setStatus('Please wait a moment before submitting.', 'error');
+			return;
+		}
+
 		if (!payload.fullName || payload.fullName.length < 2 || payload.fullName.length > 80) {
 			setStatus('Enter your full name (2-80 characters).', 'error');
 			return;
@@ -117,9 +124,10 @@ if (contactForm) {
 				},
 				body: JSON.stringify(payload),
 			});
+			const responseData = await response.json().catch(() => null);
 
 			if (!response.ok) {
-				throw new Error('Submission failed');
+				throw new Error(responseData?.error || 'Submission failed. Please check your entries and try again.');
 			}
 
 			contactForm.reset();
@@ -132,7 +140,7 @@ if (contactForm) {
 			}
 			setStatus('Thanks. Your request was sent successfully. We will reply soon.', 'success');
 		} catch (error) {
-			setStatus('Unable to send right now. Try again shortly or use the direct email option.', 'error');
+			setStatus(error?.message || 'Unable to send right now. Try again shortly or use the direct email option.', 'error');
 		} finally {
 			submitButton.disabled = false;
 			contactForm.removeAttribute('aria-busy');
