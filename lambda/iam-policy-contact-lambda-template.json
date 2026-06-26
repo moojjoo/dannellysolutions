@@ -1,0 +1,28 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowSendEmailFromExactFromAddress",
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "ses:FromAddress": "robert.dannelly@dannellysolutions.com"
+        }
+      }
+    },
+    {
+      "Sid": "AllowWriteToContactLambdaLogGroup",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:us-east-1:178522450316:log-group:/aws/lambda/dannelly-contact-form:*"
+    }
+  ]
+}

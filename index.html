@@ -42,7 +42,7 @@
         <h1>Professional technology solutions built with senior engineering discipline.</h1>
         <p class="lead">Dannelly Solutions Inc. helps businesses modernize applications, build secure APIs, improve delivery pipelines, and apply practical AI tools without unnecessary complexity or runaway cloud cost.</p>
         <div class="hero-actions">
-          <a class="button primary" href="mailto:robert.dannelly@dannellysolutions.com?subject=Consulting%20Request%20-%20Dannelly%20Solutions">Request a consultation</a>
+          <a class="button primary" href="#contact">Request a consultation</a>
           <a class="button secondary" href="#services">View services</a>
         </div>
       </div>
@@ -104,8 +104,95 @@
     <section class="section cta" id="contact">
       <p class="eyebrow">Start a conversation</p>
       <h2>Need help with software, AWS, Azure, GCP, DevOps, or AI-enabled delivery?</h2>
-      <p>Send a short note about your project, timeline, and goals.</p>
-      <a class="button primary" href="mailto:robert.dannelly@dannellysolutions.com?subject=Consulting%20Request%20-%20Dannelly%20Solutions%20Inc.">Email Dannelly Solutions Inc.</a>
+      <p>Share a few details and we will follow up quickly.</p>
+      <form
+        id="contact-form"
+        class="contact-form"
+        data-endpoint="https://mxf6jquxuvpt3nvyy5bwozd43y0zjifv.lambda-url.us-east-1.on.aws/"
+        novalidate
+      >
+        <input type="hidden" id="started-at" name="startedAt" value="" />
+        <div class="honeypot-field" aria-hidden="true">
+          <label for="company-site">Leave this field empty</label>
+          <input type="text" id="company-site" name="companySite" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-grid">
+          <label>
+            Full name *
+            <input id="full-name" name="fullName" type="text" required minlength="2" maxlength="80" autocomplete="name" />
+          </label>
+          <label>
+            Work email *
+            <input id="work-email" name="workEmail" type="email" required maxlength="120" autocomplete="email" />
+          </label>
+          <label>
+            Company name *
+            <input id="company-name" name="companyName" type="text" required minlength="2" maxlength="100" autocomplete="organization" />
+          </label>
+          <label>
+            Service needed *
+            <select id="service-type" name="serviceType" required>
+              <option value="">Select a service</option>
+              <option value="App modernization">App modernization</option>
+              <option value="Cloud/DevOps">Cloud/DevOps</option>
+              <option value="API/Integration">API/Integration</option>
+              <option value="AI enablement">AI enablement</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label>
+            Timeline *
+            <select id="timeline" name="timeline" required>
+              <option value="">Select a timeline</option>
+              <option value="ASAP">ASAP</option>
+              <option value="1-3 months">1-3 months</option>
+              <option value="3-6 months">3-6 months</option>
+              <option value="6+ months">6+ months</option>
+            </select>
+          </label>
+          <label>
+            Budget range
+            <select id="budget-range" name="budgetRange">
+              <option value="">Select budget range</option>
+              <option value="Under $10k">Under $10k</option>
+              <option value="$10k-$25k">$10k-$25k</option>
+              <option value="$25k-$50k">$25k-$50k</option>
+              <option value="$50k+">$50k+</option>
+              <option value="Not sure">Not sure</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Project summary *
+          <textarea
+            id="project-summary"
+            name="projectSummary"
+            required
+            minlength="20"
+            maxlength="1500"
+            placeholder="What problem are you solving, and what outcome do you want?"
+          ></textarea>
+        </label>
+
+        <label>
+          Contact preference and timezone
+          <input
+            id="contact-preference"
+            name="contactPreference"
+            type="text"
+            maxlength="120"
+            placeholder="Example: Email mornings, US Eastern"
+          />
+        </label>
+
+        <div class="contact-form-actions">
+          <button class="button primary" type="submit">Send request</button>
+          <a class="button secondary" href="mailto:robert.dannelly@dannellysolutions.com?subject=Consulting%20Request%20-%20Dannelly%20Solutions%20Inc.">Prefer email instead?</a>
+        </div>
+        <p id="contact-status" class="contact-status" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </main>
 

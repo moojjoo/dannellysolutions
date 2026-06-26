@@ -54,6 +54,104 @@ Suggested mailbox:
 contact@dannellysolutions.com
 robert.dannelly@dannellysolutions.com
 
+## Contact form (Lambda + SES, lowest AWS cost)
+
+The site now includes a contact form in index.html that posts JSON to a Lambda Function URL.
+
+### 1) Configure Amazon SES (same region as Lambda)
+
+1. Open Amazon SES and choose a region (recommended: us-east-1).
+2. Verify a sender identity:
+   - Preferred: your domain identity (best deliverability), or
+   - Minimum: a specific sender address such as contact@dannellysolutions.com
+3. If SES is still in sandbox mode:
+   - Verify the recipient inbox too, or
+   - Request production access.
+
+### 2) Create Lambda function
+
+1. Runtime: Node.js 20.x
+2. Upload lambda/contact-handler.mjs from this repository and set Handler to:
+   - contact-handler.handler
+3. Add environment variables:
+   - TO_EMAIL=robert.dannelly@dannellysolutions.com
+   - FROM_EMAIL=robert.dannelly@dannellysolutions.com
+   - ALLOWED_ORIGINS=https://dannellysolutions.com,https://www.dannellysolutions.com
+   - MIN_SUBMIT_SECONDS=4
+4. Lambda execution role permissions:
+   - ses:SendEmail
+   - CloudWatch Logs write permissions
+
+If packaging manually from the repository root:
+1. cd lambda
+2. zip -j contact-handler.zip contact-handler.mjs
+3. Upload contact-handler.zip in Lambda code settings
+
+### Least-privilege IAM role hardening
+
+Use the included IAM templates:
+- lambda/iam-trust-policy-lambda.json
+- lambda/iam-policy-contact-lambda-template.json
+
+Before creating the policy, edit lambda/iam-policy-contact-lambda-template.json:
+1. Set ses:FromAddress to your real sender address.
+2. Update the CloudWatch Logs ARN with your region, account id, and Lambda function name.
+
+Create role and policy with AWS CLI:
+1. aws iam create-role --role-name dannelly-contact-lambda-role --assume-role-policy-document file://lambda/iam-trust-policy-lambda.json
+2. aws iam create-policy --policy-name dannelly-contact-lambda-policy --policy-document file://lambda/iam-policy-contact-lambda-template.json
+3. aws iam attach-role-policy --role-name dannelly-contact-lambda-role --policy-arn arn:aws:iam::<ACCOUNT_ID>:policy/dannelly-contact-lambda-policy
+
+Assign the role to the Lambda function:
+1. aws lambda update-function-configuration --function-name dannelly-contact-form --role arn:aws:iam::<ACCOUNT_ID>:role/dannelly-contact-lambda-role
+
+Notes:
+1. The ses:FromAddress condition limits send permissions to only your configured sender identity.
+2. The log group resource limits write access to only this function's logs.
+3. If your function creates a new log group automatically, allow that once or pre-create the log group first.
+
+### 3) Enable Lambda Function URL
+
+1. Auth type: NONE
+2. CORS:
+   - Allowed origins: https://dannellysolutions.com, https://www.dannellysolutions.com
+   - Allowed methods: POST
+   - Allowed headers: content-type
+   - Max age: 86400
+
+### 4) Wire endpoint into site
+
+1. In index.html, find the form with id="contact-form".
+2. Set data-endpoint to your Lambda Function URL.
+
+### 5) Backend payload contract
+
+The frontend sends this payload:
+- fullName (required)
+- workEmail (required)
+- companyName (required)
+- serviceType (required)
+- timeline (required)
+- budgetRange (optional)
+- projectSummary (required)
+- contactPreference (optional)
+- startedAt (required anti-spam timestamp)
+- companySite (honeypot field, must be empty)
+
+Backend should validate lengths/enums and reject bot-like submissions.
+Backend includes a bot checker that rejects suspicious requests based on:
+- Honeypot and timing checks
+- User-agent bot signatures
+- Subject/body spam keywords and suspicious link/pattern content
+- Excessive repeated-word patterns in message content
+
+### 6) Deploy and verify
+
+1. Upload updated index.html, styles.css, and script.js to S3.
+2. Invalidate CloudFront cache (/*).
+3. Submit a test form from production and verify email delivery.
+4. Confirm invalid submissions are rejected and errors are safe for users.
+
 ## Future upgrade path
 
 If you need a real contact form later, add AWS Lambda + SES, or use a low-cost form service. Keeping the first version static avoids backend hosting cost.
