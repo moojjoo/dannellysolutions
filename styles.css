@@ -129,16 +129,39 @@ h3 { font-size: 1.35rem; }
   height: 1px;
   overflow: hidden;
 }
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .9rem;
+.contact-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(6,17,31,.4);
 }
-.contact-form label {
-  display: grid;
-  gap: .45rem;
-  font-weight: 600;
-  color: var(--text);
+.contact-table th,
+.contact-table td {
+  padding: .8rem .9rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.contact-table tr:last-child th,
+.contact-table tr:last-child td {
+  border-bottom: none;
+}
+.contact-table th {
+  width: 20%;
+  min-width: 11rem;
+  text-align: left;
+  font-weight: 700;
+  color: #d7e4f9;
+  background: rgba(255,255,255,.03);
+}
+.contact-table td {
+  width: 30%;
+}
+.contact-table label {
+  display: inline-block;
+  margin-top: .3rem;
 }
 .contact-form input,
 .contact-form select,
@@ -198,7 +221,31 @@ footer { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem
   }
   .hero, .split { grid-template-columns: 1fr; }
   .grid.cards, .trust-strip { grid-template-columns: 1fr; }
-  .form-grid { grid-template-columns: 1fr; }
+  .contact-table,
+  .contact-table tbody,
+  .contact-table tr,
+  .contact-table th,
+  .contact-table td {
+    display: block;
+    width: 100%;
+  }
+  .contact-table tr {
+    border-bottom: 1px solid var(--line);
+  }
+  .contact-table tr:last-child {
+    border-bottom: none;
+  }
+  .contact-table th,
+  .contact-table td {
+    border-bottom: none;
+    padding: .55rem .65rem;
+  }
+  .contact-table th {
+    min-width: 0;
+    background: transparent;
+    color: #deebff;
+    padding-top: .9rem;
+  }
   nav {
     display: flex;
     width: 100%;

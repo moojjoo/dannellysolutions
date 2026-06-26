@@ -117,75 +117,80 @@
           <input type="text" id="company-site" name="companySite" tabindex="-1" autocomplete="off" />
         </div>
 
-        <div class="form-grid">
-          <label>
-            Full name *
-            <input id="full-name" name="fullName" type="text" required minlength="2" maxlength="80" autocomplete="name" />
-          </label>
-          <label>
-            Work email *
-            <input id="work-email" name="workEmail" type="email" required maxlength="120" autocomplete="email" />
-          </label>
-          <label>
-            Company name *
-            <input id="company-name" name="companyName" type="text" required minlength="2" maxlength="100" autocomplete="organization" />
-          </label>
-          <label>
-            Service needed *
-            <select id="service-type" name="serviceType" required>
-              <option value="">Select a service</option>
-              <option value="App modernization">App modernization</option>
-              <option value="Cloud/DevOps">Cloud/DevOps</option>
-              <option value="API/Integration">API/Integration</option>
-              <option value="AI enablement">AI enablement</option>
-              <option value="Other">Other</option>
-            </select>
-          </label>
-          <label>
-            Timeline *
-            <select id="timeline" name="timeline" required>
-              <option value="">Select a timeline</option>
-              <option value="ASAP">ASAP</option>
-              <option value="1-3 months">1-3 months</option>
-              <option value="3-6 months">3-6 months</option>
-              <option value="6+ months">6+ months</option>
-            </select>
-          </label>
-          <label>
-            Budget range
-            <select id="budget-range" name="budgetRange">
-              <option value="">Select budget range</option>
-              <option value="Under $10k">Under $10k</option>
-              <option value="$10k-$25k">$10k-$25k</option>
-              <option value="$25k-$50k">$25k-$50k</option>
-              <option value="$50k+">$50k+</option>
-              <option value="Not sure">Not sure</option>
-            </select>
-          </label>
-        </div>
-
-        <label>
-          Project summary *
-          <textarea
-            id="project-summary"
-            name="projectSummary"
-            required
-            minlength="20"
-            maxlength="1500"
-            placeholder="What problem are you solving, and what outcome do you want?"
-          ></textarea>
-        </label>
-
-        <label>
-          Contact preference and timezone
-          <input
-            id="contact-preference"
-            name="contactPreference"
-            type="text"
-            maxlength="120"
-            placeholder="Example: Email mornings, US Eastern"
-          />
-        </label>
+        <table class="contact-table">
+          <tbody>
+            <tr>
+              <th scope="row"><label for="full-name">Full name *</label></th>
+              <td><input id="full-name" name="fullName" type="text" required minlength="2" maxlength="80" autocomplete="name" /></td>
+              <th scope="row"><label for="work-email">Work email *</label></th>
+              <td><input id="work-email" name="workEmail" type="email" required maxlength="120" autocomplete="email" /></td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="company-name">Company name *</label></th>
+              <td><input id="company-name" name="companyName" type="text" required minlength="2" maxlength="100" autocomplete="organization" /></td>
+              <th scope="row"><label for="service-type">Service needed *</label></th>
+              <td>
+                <select id="service-type" name="serviceType" required>
+                  <option value="">Select a service</option>
+                  <option value="App modernization">App modernization</option>
+                  <option value="Cloud/DevOps">Cloud/DevOps</option>
+                  <option value="API/Integration">API/Integration</option>
+                  <option value="AI enablement">AI enablement</option>
+                  <option value="Other">Other</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="timeline">Timeline *</label></th>
+              <td>
+                <select id="timeline" name="timeline" required>
+                  <option value="">Select a timeline</option>
+                  <option value="ASAP">ASAP</option>
+                  <option value="1-3 months">1-3 months</option>
+                  <option value="3-6 months">3-6 months</option>
+                  <option value="6+ months">6+ months</option>
+                </select>
+              </td>
+              <th scope="row"><label for="budget-range">Budget range</label></th>
+              <td>
+                <select id="budget-range" name="budgetRange">
+                  <option value="">Select hourly budget range</option>
+                  <option value="$75-$99/hr">$75-$99/hr (minimum)</option>
+                  <option value="$100-$149/hr">$100-$149/hr</option>
+                  <option value="$150-$199/hr">$150-$199/hr</option>
+                  <option value="$200+/hr">$200+/hr</option>
+                  <option value="Project-based">Project-based (fixed bid)</option>
+                  <option value="Not sure">Not sure yet</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="project-summary">Project summary *</label></th>
+              <td colspan="3">
+                <textarea
+                  id="project-summary"
+                  name="projectSummary"
+                  required
+                  minlength="20"
+                  maxlength="1500"
+                  placeholder="What problem are you solving, and what outcome do you want?"
+                ></textarea>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="contact-preference">Contact preference and timezone</label></th>
+              <td colspan="3">
+                <input
+                  id="contact-preference"
+                  name="contactPreference"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Example: Email mornings, US Eastern"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div class="contact-form-actions">
           <button class="button primary" type="submit">Send request</button>
