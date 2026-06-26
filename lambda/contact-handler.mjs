@@ -2,7 +2,7 @@ import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 const ses = new SESClient({});
 
-const REQUIRED_ENV = ['TO_EMAIL', 'FROM_EMAIL'];
+const REQUIRED_ENV = ['TO_EMAIL', 'FROM_EMAIL', 'TURNSTILE_SECRET_KEY'];
 const ALLOWED_SERVICES = new Set([
   'App modernization',
   'Cloud/DevOps',
@@ -98,6 +98,7 @@ function validatePayload(payload) {
   const budgetRange = normalizeText(payload.budgetRange);
   const projectSummary = normalizeText(payload.projectSummary);
   const contactPreference = normalizeText(payload.contactPreference);
+  const turnstileToken = normalizeText(payload.turnstileToken || payload['cf-turnstile-response']);
   const companySite = normalizeText(payload.companySite);
   const startedAt = Number(payload.startedAt || 0);
 
@@ -132,6 +133,9 @@ function validatePayload(payload) {
   if (contactPreference.length > 120) {
     fail('Contact preference is too long.');
   }
+  if (!turnstileToken) {
+    fail('Please complete verification and try again.');
+  }
 
   return {
     fullName,
@@ -142,7 +146,60 @@ function validatePayload(payload) {
     budgetRange,
     projectSummary,
     contactPreference,
+    turnstileToken,
   };
+}
+
+function getClientIp(event) {
+  const xForwardedFor = normalizeText(event?.headers?.['x-forwarded-for'] || event?.headers?.['X-Forwarded-For']);
+  if (xForwardedFor) {
+    return xForwardedFor.split(',')[0].trim();
+  }
+  return normalizeText(event?.requestContext?.http?.sourceIp || event?.requestContext?.identity?.sourceIp);
+}
+
+function getExpectedHostname(origin) {
+  try {
+    if (!origin) {
+      return '';
+    }
+    return new URL(origin).hostname;
+  } catch {
+    return '';
+  }
+}
+
+async function verifyTurnstileToken(token, remoteIp, expectedHostname) {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  const body = new URLSearchParams({
+    secret,
+    response: token,
+  });
+
+  if (remoteIp) {
+    body.set('remoteip', remoteIp);
+  }
+
+  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: body.toString(),
+  });
+
+  if (!response.ok) {
+    fail('Verification failed. Please try again.');
+  }
+
+  const result = await response.json();
+  if (!result.success) {
+    fail('Verification failed. Please try again.');
+  }
+
+  if (expectedHostname && result.hostname && result.hostname !== expectedHostname) {
+    fail('Verification failed. Please try again.');
+  }
 }
 
 function containsSpamContent(subject, body) {
@@ -216,7 +273,7 @@ function buildMessage(data) {
   return lines.join('\n');
 }
 
-async function sendInquiryEmail(event, data) {
+async function sendInquiryEmail(event, origin, data) {
   const toEmail = process.env.TO_EMAIL;
   const fromEmail = process.env.FROM_EMAIL;
 
@@ -225,6 +282,10 @@ async function sendInquiryEmail(event, data) {
       throw new Error(`Missing environment variable: ${key}`);
     }
   }
+
+  const clientIp = getClientIp(event);
+  const expectedHostname = getExpectedHostname(origin);
+  await verifyTurnstileToken(data.turnstileToken, clientIp, expectedHostname);
 
   const subject = `New Consulting Inquiry | ${data.serviceType} | ${data.companyName}`;
   const body = buildMessage(data);
@@ -269,7 +330,7 @@ export const handler = async (event) => {
   try {
     const payload = event?.body ? JSON.parse(event.body) : {};
     const inquiry = validatePayload(payload);
-    await sendInquiryEmail(event, inquiry);
+    await sendInquiryEmail(event, origin, inquiry);
     return jsonResponse(200, { ok: true }, origin, allowedOrigins);
   } catch (error) {
     const isValidationError = error && error.isValidationError;

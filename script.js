@@ -43,6 +43,7 @@ if (contactForm) {
 			contactPreference: String(formData.get('contactPreference') || '').trim(),
 			startedAt: Number(formData.get('startedAt') || 0),
 			companySite: String(formData.get('companySite') || '').trim(),
+			turnstileToken: String(formData.get('cf-turnstile-response') || '').trim(),
 		};
 
 		if (!payload.fullName || payload.fullName.length < 2 || payload.fullName.length > 80) {
@@ -79,6 +80,11 @@ if (contactForm) {
 			return;
 		}
 
+		if (!payload.turnstileToken) {
+			setStatus('Please complete the verification challenge.', 'error');
+			return;
+		}
+
 		submitButton.disabled = true;
 		contactForm.setAttribute('aria-busy', 'true');
 		setStatus('Sending your request...', null);
@@ -99,6 +105,9 @@ if (contactForm) {
 			contactForm.reset();
 			if (startedAtField) {
 				startedAtField.value = String(Date.now());
+			}
+			if (window.turnstile && typeof window.turnstile.reset === 'function') {
+				window.turnstile.reset();
 			}
 			setStatus('Thanks. Your request was sent successfully. We will reply soon.', 'success');
 		} catch (error) {

@@ -78,6 +78,7 @@ The site now includes a contact form in index.html that posts JSON to a Lambda F
    - FROM_EMAIL=robert.dannelly@dannellysolutions.com
    - ALLOWED_ORIGINS=https://dannellysolutions.com,https://www.dannellysolutions.com
    - MIN_SUBMIT_SECONDS=4
+   - TURNSTILE_SECRET_KEY=REPLACE_WITH_TURNSTILE_SECRET
 4. Lambda execution role permissions:
    - ses:SendEmail
    - CloudWatch Logs write permissions
@@ -123,6 +124,16 @@ Notes:
 
 1. In index.html, find the form with id="contact-form".
 2. Set data-endpoint to your Lambda Function URL.
+3. Set Turnstile site key in the widget data-sitekey value.
+
+### 4.1) Turnstile setup (recommended free bot protection)
+
+1. Create a Cloudflare Turnstile widget for your domain(s).
+2. Add both production hostnames in Turnstile allowed domains:
+   - dannellysolutions.com
+   - www.dannellysolutions.com
+3. Put the site key in index.html data-sitekey.
+4. Put the secret key in Lambda environment variable TURNSTILE_SECRET_KEY.
 
 ### 5) Backend payload contract
 
@@ -137,9 +148,11 @@ The frontend sends this payload:
 - contactPreference (optional)
 - startedAt (required anti-spam timestamp)
 - companySite (honeypot field, must be empty)
+- turnstileToken (required; maps from cf-turnstile-response)
 
 Backend should validate lengths/enums and reject bot-like submissions.
 Backend includes a bot checker that rejects suspicious requests based on:
+- Turnstile token verification (Cloudflare siteverify)
 - Honeypot and timing checks
 - User-agent bot signatures
 - Subject/body spam keywords and suspicious link/pattern content

@@ -11,6 +11,7 @@
   <meta property="og:type" content="website" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MK1NPN5N6N"></script>
@@ -187,6 +188,18 @@
                   maxlength="120"
                   placeholder="Example: Email mornings, US Eastern"
                 />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="turnstile-widget">Verification *</label></th>
+              <td colspan="3">
+                <div
+                  id="turnstile-widget"
+                  class="cf-turnstile"
+                  data-sitekey="REPLACE_WITH_TURNSTILE_SITE_KEY"
+                  data-theme="dark"
+                  data-response-field-name="cf-turnstile-response"
+                ></div>
               </td>
             </tr>
           </tbody>
