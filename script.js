@@ -6,7 +6,9 @@ if (contactForm) {
 	const statusElement = document.getElementById('contact-status');
 	const submitButton = contactForm.querySelector('button[type="submit"]');
 	const startedAtField = document.getElementById('started-at');
+	const companySiteField = document.getElementById('company-site');
 	const endpoint = (contactForm.dataset.endpoint || '').trim();
+	const endpointVersion = '20260626-2';
 	const minSubmitMs = 4000;
 	const turnstileWidget = document.getElementById('turnstile-widget');
 	let cachedTurnstileToken = '';
@@ -25,6 +27,9 @@ if (contactForm) {
 
 	if (startedAtField) {
 		startedAtField.value = String(Date.now());
+	}
+	if (companySiteField) {
+		companySiteField.value = '';
 	}
 
 	const setStatus = (message, state) => {
@@ -47,6 +52,9 @@ if (contactForm) {
 		event.preventDefault();
 
 		const formData = new FormData(contactForm);
+		if (companySiteField) {
+			companySiteField.value = '';
+		}
 		const tokenFromField = String(formData.get('cf-turnstile-response') || '').trim();
 		const tokenFromApi =
 			window.turnstile && typeof window.turnstile.getResponse === 'function'
@@ -63,7 +71,7 @@ if (contactForm) {
 			projectSummary: String(formData.get('projectSummary') || '').trim(),
 			contactPreference: String(formData.get('contactPreference') || '').trim(),
 			startedAt: Number(formData.get('startedAt') || 0),
-			companySite: String(formData.get('companySite') || '').trim(),
+			companySite: '',
 			turnstileToken: tokenFromField || tokenFromApi || cachedTurnstileToken,
 		};
 
@@ -107,6 +115,15 @@ if (contactForm) {
 			return;
 		}
 
+		let requestUrl = endpoint;
+		try {
+			const endpointUrl = new URL(endpoint);
+			endpointUrl.searchParams.set('v', endpointVersion);
+			requestUrl = endpointUrl.toString();
+		} catch {
+			requestUrl = endpoint;
+		}
+
 		if (!payload.turnstileToken) {
 			setStatus('Verification is required. Complete the human check, then submit.', 'error');
 			return;
@@ -117,7 +134,7 @@ if (contactForm) {
 		setStatus('Sending your request...', null);
 
 		try {
-			const response = await fetch(endpoint, {
+			const response = await fetch(requestUrl, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -153,7 +170,12 @@ if (contactForm) {
 			}
 			setStatus('Thanks. Your request was sent successfully. We will reply soon.', 'success');
 		} catch (error) {
-			setStatus(error?.message || 'Unable to send right now. Try again shortly or use the direct email option.', 'error');
+			const isNetworkError =
+				error instanceof TypeError && /fetch|network/i.test(String(error?.message || ''));
+			const fallbackMessage = isNetworkError
+				? 'Network connection to the secure contact endpoint failed. Refresh the page and try again. If it persists, disable blockers/VPN for this site or use the email option.'
+				: 'Unable to send right now. Try again shortly or use the direct email option.';
+			setStatus(error?.message || fallbackMessage, 'error');
 		} finally {
 			submitButton.disabled = false;
 			contactForm.removeAttribute('aria-busy');

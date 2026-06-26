@@ -58,15 +58,10 @@ function getAllowedOrigins() {
 }
 
 function jsonResponse(statusCode, body, origin, allowedOrigins) {
-  const allowOrigin = allowedOrigins.includes(origin) ? origin : '';
   const headers = {
     'Content-Type': 'application/json',
     Vary: 'Origin',
   };
-
-  if (allowOrigin) {
-    headers['Access-Control-Allow-Origin'] = allowOrigin;
-  }
 
   return {
     statusCode,
