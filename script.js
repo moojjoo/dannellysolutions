@@ -124,10 +124,23 @@ if (contactForm) {
 				},
 				body: JSON.stringify(payload),
 			});
-			const responseData = await response.json().catch(() => null);
+			const rawBody = await response.text();
+			let responseData = null;
+			if (rawBody) {
+				try {
+					responseData = JSON.parse(rawBody);
+				} catch {
+					responseData = null;
+				}
+			}
 
 			if (!response.ok) {
-				throw new Error(responseData?.error || 'Submission failed. Please check your entries and try again.');
+				const serverMessage =
+					responseData?.error ||
+					responseData?.message ||
+					(rawBody ? rawBody.trim() : '') ||
+					`Request failed with status ${response.status}.`;
+				throw new Error(serverMessage);
 			}
 
 			contactForm.reset();
