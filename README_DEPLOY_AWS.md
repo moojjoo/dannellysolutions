@@ -70,7 +70,7 @@ The site now includes a contact form in index.html that posts JSON to a Lambda F
 
 ### 2) Create Lambda function
 
-1. Runtime: Node.js 20.x
+1. Runtime: Node.js 24.x (identifier: nodejs24.x)
 2. Upload lambda/contact-handler.mjs from this repository and set Handler to:
    - contact-handler.handler
 3. Add environment variables:
@@ -87,6 +87,9 @@ If packaging manually from the repository root:
 1. cd lambda
 2. zip -j contact-handler.zip contact-handler.mjs
 3. Upload contact-handler.zip in Lambda code settings
+
+If you already have a Node.js 20.x function, upgrade the runtime in place:
+1. aws lambda update-function-configuration --function-name dannelly-contact-form --runtime nodejs24.x
 
 ### Least-privilege IAM role hardening
 
