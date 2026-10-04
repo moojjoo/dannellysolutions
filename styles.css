@@ -110,6 +110,26 @@ h3 { font-size: 1.35rem; }
 .grid.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 .card { padding: 1.4rem; }
 .card p, .split p, .cta p { color: var(--muted); }
+.portfolio-card {
+  display: grid;
+  gap: .7rem;
+}
+.card-meta {
+  margin: 0;
+  color: #b9c7de;
+  font-size: .93rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.card-impact {
+  margin: .15rem 0 .35rem;
+  color: #dce7f8;
+  font-weight: 600;
+}
+.card-link {
+  justify-self: start;
+  margin-top: .4rem;
+}
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
 .steps { display: grid; gap: 1rem; }
 .steps div { display: grid; grid-template-columns: 3.5rem 1fr; gap: 1rem; padding: 1rem; align-items: center; }
