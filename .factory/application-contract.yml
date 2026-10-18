@@ -1,0 +1,22 @@
+# Canonical policy and schema live in:
+# moojjoo/dannellysolutions-software-factory/.github/prompts/sync-application.prompt.md
+# moojjoo/dannellysolutions-software-factory/contracts/application-contract.schema.json
+factory_repo: moojjoo/dannellysolutions-software-factory
+application_repo: moojjoo/dannellysolutions
+application_name: Dannelly Solutions website
+default_branch: master
+project_name: Dannelly Solutions
+environments:
+  - dev
+  - test
+  - prod
+approval_label: dev-acceptance-verified
+partial_marker: "Refs #<issue>"
+final_marker: "Dev-Completes: #<issue>"
+dev_workflow: .github/workflows/deploy-s3.yml
+test_workflow: .github/workflows/deploy-s3.yml
+prod_workflow: .github/workflows/deploy-s3.yml
+implementation_overrides:
+  deployment_model: "S3 and CloudFront static website deployment"
+  application_tests: "Static checks and deployment smoke tests"
+  api: "none"
