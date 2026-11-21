@@ -294,3 +294,21 @@ footer { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem
     transition-duration: .01ms !important;
   }
 }
+
+/* Website policies and optional analytics. */
+.policy-page { max-width: 780px; margin-inline: auto; }
+.policy-page section { margin-block: 1.6rem; }
+.policy-page p, .policy-page li { max-width: 72ch; }
+.policy-links { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.policy-page a, .policy-links a, .privacy-note a, .privacy-choice a {
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+.policy-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.privacy-choice { padding-block: 1rem; }
+.privacy-choice h2 { margin-bottom: .5rem; }
+.privacy-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+.privacy-actions button { min-height: 44px; }
+.privacy-status { min-height: 1.5em; }
+.privacy-note { margin-bottom: .75rem; }
+.policy-links [hidden], .privacy-choice[hidden] { display: none; }
