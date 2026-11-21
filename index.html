@@ -13,15 +13,6 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MK1NPN5N6N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MK1NPN5N6N');
-</script>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <header class="site-header">
@@ -57,6 +48,17 @@
           <li>AI-assisted engineering workflows</li>
         </ul>
       </aside>
+    </section>
+
+    <section class="section privacy-choice" id="cookie-preferences" aria-labelledby="cookie-preferences-title" hidden>
+      <h2 id="cookie-preferences-title">Analytics preferences</h2>
+      <p>Google Analytics is optional. You can use this site and the contact form without it.</p>
+      <div class="privacy-actions">
+        <button class="button secondary" id="allow-analytics" type="button">Allow analytics</button>
+        <button class="button secondary" id="reject-analytics" type="button">Keep analytics off</button>
+      </div>
+      <p class="privacy-status" id="analytics-status" role="status"></p>
+      <p><a href="cookies.html">Read the cookie and storage notice</a></p>
     </section>
 
     <section class="trust-strip" aria-label="Company strengths">
@@ -246,6 +248,7 @@
           </tbody>
         </table>
 
+        <p class="privacy-note">We use these details to handle your inquiry. <a href="privacy.html">Read our privacy notice</a>.</p>
         <div class="contact-form-actions">
           <button class="button primary" type="submit">Send request</button>
           <a class="button secondary" href="mailto:robert.dannelly@dannellysolutions.com?subject=Consulting%20Request%20-%20Dannelly%20Solutions%20Inc.">Prefer email instead?</a>
@@ -258,7 +261,14 @@
   <footer>
     <p>© <span id="year"></span> Dannelly Solutions Inc. All rights reserved.</p>
     <p>Mooresville, NC • Enterprise Software Consulting</p>
+    <nav class="policy-links" aria-label="Website policies">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Website terms</a>
+      <a href="cookies.html">Cookies and storage</a>
+      <a href="#cookie-preferences" id="open-analytics-preferences" hidden>Analytics preferences</a>
+    </nav>
   </footer>
   <script src="script.js"></script>
+  <script src="analytics-preferences.js"></script>
 </body>
 </html>
