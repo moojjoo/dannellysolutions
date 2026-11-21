@@ -3,6 +3,21 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const contactForm = document.getElementById('contact-form');
 
 if (contactForm) {
+	const serviceField = contactForm.querySelector('#service-type');
+	if (serviceField) {
+		for (const serviceLink of document.querySelectorAll('#services a[data-contact-service]')) {
+			serviceLink.addEventListener('click', (event) => {
+				if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+					return;
+				}
+				const value = serviceLink.dataset.contactService;
+				if (Array.from(serviceField.options).some((option) => option.value === value)) {
+					serviceField.value = value;
+				}
+			});
+		}
+	}
+
 	const statusElement = document.getElementById('contact-status');
 	const submitButton = contactForm.querySelector('button[type="submit"]');
 	const startedAtField = document.getElementById('started-at');
